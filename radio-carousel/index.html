@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Carousel</title>
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider  {
+      width: 600px;
+      max-width: 90%;
+      overflow: hidden;
+    }
+
+    .slides {
+      display: flex;
+      flex-wrap: nowrap;
+      width: 500%;
+    }
+
+    .slide {
+      width: 100%;
+    }
+
+    #slide1-state:checked ~ .slides { transform: translateX(0); }
+    #slide2-state:checked ~ .slides { transform: translateX(-20%); }
+    #slide3-state:checked ~ .slides { transform: translateX(-40%); }
+    #slide4-state:checked ~ .slides { transform: translateX(-60%); }
+    #slide5-state:checked ~ .slides { transform: translateX(-80%); }
+  </style>
+</head>
+<body>
+  <!-- https://alistapart.com/article/radio-controlled-web-design -->
+  <figure class="slider">
+    <input type="radio" name="slide-state" id="slide1-state" checked>
+    <input type="radio" name="slide-state" id="slide2-state">
+    <input type="radio" name="slide-state" id="slide3-state">
+    <input type="radio" name="slide-state" id="slide4-state">
+    <input type="radio" name="slide-state" id="slide5-state">
+
+    <div class="slides">
+      <img class="slide" src="/images/img1.jpg" alt="">
+      <img class="slide" src="/images/img2.jpg" alt="">
+      <img class="slide" src="/images/img3.jpg" alt="">
+      <img class="slide" src="/images/img4.jpg" alt="">
+      <img class="slide" src="/images/img5.jpg" alt="">
+    </div>
+
+    <!-- add group of labels here to simulate pips/back/forward -->
+  </figure>
+</body>
+</html>

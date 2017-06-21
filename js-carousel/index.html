@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Carousel</title>
+  <style>
+    a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider  {
+      width: 600px;
+      max-width: 90%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slides {
+      display: flex;
+      wrap: nowrap;
+    }
+
+    .slide {
+      width: 100%;
+    }
+
+    .slider-controls {
+      position: absolute;
+      left: 0;
+      bottom: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .slider-autoplay-controls {
+
+    }
+
+    /*.slide[aria-hidden='true'] { display: none; }
+    .slide[aria-hidden='false'] { display:block ; }*/
+  </style>
+</head>
+<body>
+  <figure class="slider">
+    <ul id="slides" class="slides" aria-live="polite">
+      <li id="slide1" class="slide" aria-hidden="false">
+        <img src="/images/img1.jpg" alt="">
+      </li>
+      <li id="slide2" class="slide" aria-hidden="true">
+        <img src="/images/img2.jpg" alt="">
+      </li>
+      <li id="slide3" class="slide" aria-hidden="true">
+        <img src="/images/img3.jpg" alt="">
+      </li>
+      <li id="slide4" class="slide" aria-hidden="true">
+        <img src="/images/img4.jpg" alt="">
+      </li>
+      <li id="slide5" class="slide" aria-hidden="true">
+        <img src="/images/img5.jpg" alt="">
+      </li>
+    </ul>
+
+    <!-- As to why these are wrapped in a template: the controls should not
+         render unless the script is active; otherwise the 'slides' should
+         just render as a list of images/text etc -->
+    <template class="slider-controls-template">
+      <fieldset aria-label="slider controls" class="slider-controls" aria-controls="slides">
+        <button type="button" value="prev" class="slider-control-prev" aria-label="previous slide"><<</button>
+        <button type="button" value="next" class="slider-control-next" aria-label="next slide">>></button>
+      </fieldset>
+    </template>
+
+    <template class="slider-autoplay-controls-template">
+      <fieldset aria-label="slider autoplay controls" class="slider-autoplay-controls" aria-controls="slides">
+        <button type="button" value="play slides" class="slider-control-play" aria-label="play slides">▶︎</button>
+        <button type="button" value="pause slides" class="slider-control-pause" aria-label="pause slides" disabled>||</button>
+      </fieldset>
+    </template>
+  </figure>
+
+  <script src="./slider-compiled.js"></script>
+  <script>
+    const slider = new Slider('.slider');
+    slider.init();
+  </script>
+</body>
+</html>
