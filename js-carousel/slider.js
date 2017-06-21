@@ -29,8 +29,10 @@ class Slider {
     this.slidesContainer = this.slider.querySelector('.slides');
     this.slides = this.slider.getElementsByClassName('slide');
     // Template selection (these may not exist):
-    this.sliderControlsTemplate = this.slider.querySelector('.slider-controls-template');
-    this.sliderAutoplayControlsTemplate = this.slider.querySelector('.slider-autoplay-controls-template');
+    this.sliderControlsPrevTemplate = this.slider.querySelector('.slider-controls-prev-template');
+    this.sliderControlsNextTemplate = this.slider.querySelector('.slider-controls-next-template');
+    this.sliderAutoplayControlsPlayTemplate = this.slider.querySelector('.slider-autoplay-controls-play-template');
+    this.sliderAutoplayControlsPauseTemplate = this.slider.querySelector('.slider-autoplay-controls-pause-template');
     // DOM controls, undefined until controls are loaded (these may not exist):
     this.sliderControlPrev;
     this.sliderControlNext;
@@ -40,8 +42,8 @@ class Slider {
     const opts = Object.assign(this.slider.dataset, sliderDefaults);
 
     // Slider controls state:
-    this.hasControls = Boolean(this.sliderControlsTemplate); // cast object to bool to check for existance
-    this.canAutoplay = Boolean(this.sliderAutoplayControlsTemplate); // cast object to bool to check for existance
+    this.hasControls = Boolean(this.sliderControlsPrevTemplate) && Boolean(this.sliderControlsNextTemplate); // cast object to bool to check for existance
+    this.canAutoplay = Boolean(this.sliderAutoplayControlsPlayTemplate) && Boolean(this.sliderAutoplayControlsPauseTemplate); // cast object to bool to check for existance
 
     if (!this.hasControls && !this.canAutoplay) throw new Error('Slider has neither controls nor autoplay functionality so cannot act as a slider.');
 
@@ -77,7 +79,8 @@ class Slider {
 
   loadControls() {
     if (this.hasControls && this.numSlides > 1) {
-      this.slider.appendChild(this.sliderControlsTemplate.content.cloneNode(true));
+      this.slider.appendChild(this.sliderControlsPrevTemplate.content.cloneNode(true));
+      this.slider.appendChild(this.sliderControlsNextTemplate.content.cloneNode(true));
       // Add the control references to the state:
       this.sliderControlPrev = this.slider.getElementsByClassName('slider-control-prev')[0];
       this.sliderControlNext = this.slider.getElementsByClassName('slider-control-next')[0];
@@ -86,7 +89,8 @@ class Slider {
 
   loadAutoplayControls() {
     if (this.canAutoplay && this.numSlides > 1) {
-      this.slider.appendChild(this.sliderAutoplayControlsTemplate.content.cloneNode(true));
+      this.slider.appendChild(this.sliderAutoplayControlsPlayTemplate.content.cloneNode(true));
+      this.slider.appendChild(this.sliderAutoplayControlsPauseTemplate.content.cloneNode(true));
       // Add the autoplay control references to the state:
       this.sliderControlPlay = this.slider.getElementsByClassName('slider-control-play')[0];
       this.sliderControlPause = this.slider.getElementsByClassName('slider-control-pause')[0];

@@ -36,11 +36,13 @@ var Slider = function () {
 
     // DOM selection:
     this.slider = document.querySelector(element);
-    this.slideContainer = this.slider.querySelector('.slides');
+    this.slidesContainer = this.slider.querySelector('.slides');
     this.slides = this.slider.getElementsByClassName('slide');
     // Template selection (these may not exist):
-    this.sliderControlsTemplate = this.slider.querySelector('.slider-controls-template');
-    this.sliderAutoplayControlsTemplate = this.slider.querySelector('.slider-autoplay-controls-template');
+    this.sliderControlsPrevTemplate = this.slider.querySelector('.slider-controls-prev-template');
+    this.sliderControlsNextTemplate = this.slider.querySelector('.slider-controls-next-template');
+    this.sliderAutoplayControlsPlayTemplate = this.slider.querySelector('.slider-autoplay-controls-play-template');
+    this.sliderAutoplayControlsPauseTemplate = this.slider.querySelector('.slider-autoplay-controls-pause-template');
     // DOM controls, undefined until controls are loaded (these may not exist):
     this.sliderControlPrev;
     this.sliderControlNext;
@@ -50,8 +52,8 @@ var Slider = function () {
     var opts = Object.assign(this.slider.dataset, sliderDefaults);
 
     // Slider controls state:
-    this.hasControls = Boolean(this.sliderControlsTemplate); // cast object to bool to check for existance
-    this.canAutoplay = Boolean(this.sliderAutoplayControlsTemplate); // cast object to bool to check for existance
+    this.hasControls = Boolean(this.sliderControlsPrevTemplate) && Boolean(this.sliderControlsNextTemplate); // cast object to bool to check for existance
+    this.canAutoplay = Boolean(this.sliderAutoplayControlsPlayTemplate) && Boolean(this.sliderAutoplayControlsPauseTemplate); // cast object to bool to check for existance
 
     if (!this.hasControls && !this.canAutoplay) throw new Error('Slider has neither controls nor autoplay functionality so cannot act as a slider.');
 
@@ -68,24 +70,33 @@ var Slider = function () {
       // TODO stub function, this method should lazy load the remaining slides
       this.numSlides = this.slides.length;
     }
+
+    /**
+     * Transitions are inherently tied to the slider UI, and depend upon
+     * the number of slides to accurately calculate the % change in position.
+     * The setup function applies the correct % width for the overall
+     * constainer, and the apply function is ran each time a next/prev
+     * handler is triggered to apply the corect trnslation.
+     */
+
   }, {
     key: 'setupTransitions',
     value: function setupTransitions() {
-      this.slideContainer.style.width = this.numSlides * 100 + '%';
+      this.slidesContainer.style.width = this.numSlides * 100 + '%';
       this.applyTransitions();
     }
   }, {
     key: 'applyTransitions',
     value: function applyTransitions() {
-      var transitionPercent = 100 / this.numSlides;
-      var transitionProp = 'translateX(-' + (this.currentSlide - 1) * transitionPercent + '%)';
-      this.slideContainer.style.transform = transitionProp;
+      var translation = 'translateX(-' + (this.currentSlide - 1) * (100 / this.numSlides) + '%)';
+      this.slidesContainer.style.transform = translation;
     }
   }, {
     key: 'loadControls',
     value: function loadControls() {
       if (this.hasControls && this.numSlides > 1) {
-        this.slider.appendChild(this.sliderControlsTemplate.content.cloneNode(true));
+        this.slider.appendChild(this.sliderControlsPrevTemplate.content.cloneNode(true));
+        this.slider.appendChild(this.sliderControlsNextTemplate.content.cloneNode(true));
         // Add the control references to the state:
         this.sliderControlPrev = this.slider.getElementsByClassName('slider-control-prev')[0];
         this.sliderControlNext = this.slider.getElementsByClassName('slider-control-next')[0];
@@ -95,7 +106,8 @@ var Slider = function () {
     key: 'loadAutoplayControls',
     value: function loadAutoplayControls() {
       if (this.canAutoplay && this.numSlides > 1) {
-        this.slider.appendChild(this.sliderAutoplayControlsTemplate.content.cloneNode(true));
+        this.slider.appendChild(this.sliderAutoplayControlsPlayTemplate.content.cloneNode(true));
+        this.slider.appendChild(this.sliderAutoplayControlsPauseTemplate.content.cloneNode(true));
         // Add the autoplay control references to the state:
         this.sliderControlPlay = this.slider.getElementsByClassName('slider-control-play')[0];
         this.sliderControlPause = this.slider.getElementsByClassName('slider-control-pause')[0];
