@@ -25,31 +25,12 @@
     .slides {
       display: flex;
       wrap: nowrap;
-      transition: transform 1s cubic-bezier(0.685, -0.220, 0.405, 1.195);
+      /*transition: transform 1s;*/
     }
 
     .slide {
       width: 100%;
     }
-
-    .slider-control-prev,
-    .slider-control-next {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      display: flex;
-      flex flow: col nowrap;
-      align-items: center;
-    }
-    .slider-control-prev { left: 0; }
-    .slider-control-next { right: 0; }
-
-
-    .slider-control-autoplay-play {}
-    .slider-control-autoplay-plause {}
-
-    /*.slide[aria-hidden='true'] { display: none; }
-    .slide[aria-hidden='false'] { display:block ; }*/
   </style>
 </head>
 <body>
@@ -59,53 +40,27 @@
         <img src="/images/img1.jpg" alt="">
       </li>
       <li id="slide2" class="slide" aria-hidden="true">
-        <img src="/images/img2.jpg" alt="">
+        <img data-src="/images/img2.jpg" alt="">
       </li>
       <li id="slide3" class="slide" aria-hidden="true">
-        <img src="/images/img3.jpg" alt="">
+        <img data-src="/images/img3.jpg" alt="">
       </li>
       <li id="slide4" class="slide" aria-hidden="true">
-        <img src="/images/img4.jpg" alt="">
+        <img data-src="/images/img4.jpg" alt="">
       </li>
       <li id="slide5" class="slide" aria-hidden="true">
-        <img src="/images/img5.jpg" alt="">
+        <img data-src="/images/img5.jpg" alt="">
       </li>
     </ul>
 
-    <!-- As to why these are wrapped in a template: the controls should not
-         render unless the script is active; otherwise the 'slides' should
-         just render as a list of images/text etc -->
-    <!-- <template class="slider-controls-template">
-      <fieldset aria-label="slider controls" class="slider-controls" aria-controls="slides">
-        <button type="button" value="prev" class="slider-control-prev" aria-label="previous slide"><<</button>
-        <button type="button" value="next" class="slider-control-next" aria-label="next slide">>></button>
-      </fieldset>
-    </template>
 
-    <template class="slider-autoplay-controls-template">
-      <fieldset aria-label="slider autoplay controls" class="slider-autoplay-controls" aria-controls="slides">
-        <button type="button" value="play slides" class="slider-control-play" aria-label="play slides">▶︎</button>
-        <button type="button" value="pause slides" class="slider-control-pause" aria-label="pause slides" disabled>||</button>
-      </fieldset>
-    </template> -->
-    <template class="slider-controls-prev-template">
-      <button type="button" value="prev" class="slider-control-prev" aria-label="previous slide" aria-controls="slides"><<</button>
-    </template>
-
-    <template class="slider-controls-next-template">
-      <button type="button" value="next" class="slider-control-next" aria-label="next slide" aria-controls="slides">>></button>
-    </template>
-
-    <template class="slider-autoplay-controls-play-template">
-      <button type="button" value="play slides" class="slider-control-play" aria-label="play slides" aria-controls="slides">▶︎</button>
-    </template>
-
-    <template class="slider-autoplay-controls-pause-template">
-      <button type="button" value="pause slides" class="slider-control-pause" aria-label="pause slides"  aria-controls="slides" disabled>||</button>
-    </template>
+    <button type="button" value="prev" class="slider-control slider-control-prev" aria-label="previous slide" aria-controls="slides"><<</button>
+    <button type="button" value="next" class="slider-control slider-control-next" aria-label="next slide" aria-controls="slides">>></button>
+    <button type="button" value="play slides" class="slider-autoplay-control slider-control-play" aria-label="play slides" aria-controls="slides">▶︎</button>
+    <button type="button" value="pause slides" class="slider-autoplay-control slider-control-pause" aria-label="pause slides"  aria-controls="slides" disabled>||</button>
   </figure>
 
-  <script src="./slider-compiled.js"></script>
+  <script src="./slider.js"></script>
   <script>
     const slider = new Slider('.slider');
     slider.init();
