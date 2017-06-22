@@ -1,9 +1,8 @@
 {
-  "plugins": ["transform-object-assign"],
   "presets": [
     ["env", {
       "targets": {
-        "browsers": ["last 2 versions", "IE 11"]
+        "browsers": ["last 2 versions"]
       },
     }]
   ]
