@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./slider.css">
+</head>
+<body>
+  <figure class="slider">
+    <ul id="slides" class="slides" aria-live="polite">
+      <li id="slide1" class="slide" aria-hidden="false">
+        <img src="./images/img1.jpg" alt="">
+      </li>
+      <li id="slide2" class="slide" aria-hidden="true">
+        <img data-src="./images/img2.jpg" alt="">
+      </li>
+      <li id="slide3" class="slide" aria-hidden="true">
+        <img data-src="./images/img3.jpg" alt="">
+      </li>
+      <li id="slide4" class="slide" aria-hidden="true">
+        <img data-src="./images/img4.jpg" alt="">
+      </li>
+      <li id="slide5" class="slide" aria-hidden="true">
+        <img data-src="./images/img5.jpg" alt="">
+      </li>
+    </ul>
+
+
+    <button type="button" value="prev" class="slider-control slider-control-prev" aria-label="previous slide" aria-controls="slides"><<</button>
+    <button type="button" value="next" class="slider-control slider-control-next" aria-label="next slide" aria-controls="slides">>></button>
+    <button type="button" value="play slides" class="slider-autoplay-control slider-control-play" aria-label="play slides" aria-controls="slides">▶︎</button>
+    <button type="button" value="pause slides" class="slider-autoplay-control slider-control-pause" aria-label="pause slides"  aria-controls="slides" disabled>||</button>
+  </figure>
+
+  <script src="./slider.js"></script>
+  <script>
+    const slider = new Slider('.slider');
+    slider.init();
+  </script>
+</body>
+</html>

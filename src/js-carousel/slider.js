@@ -24,19 +24,19 @@ class Slider {
     this.sliderControlPlay = this.slider.querySelector('.slider-control-play');
     this.sliderControlPause = this.slider.querySelector('.slider-control-pause');
 
-    // For the controls to work, both prev and next _must_ be present.
-    // for the autoplay to work, pause and play _must_ be present.
+    // For the controls to work, both prev and next *must* be present.
+    // for the autoplay to work, pause and play *must* be present.
     this.hasControls = !!this.sliderControlPrev && !!this.sliderControlNext;
     this.canAutoplay = !!this.sliderControlPlay && !!this.sliderControlPause;
     // Immediately blow up if there are no controls at all:
     if (!this.hasControls && !this.canAutoplay) throw new Error('Slider controls cannot be located in the DOM');
 
+    // Overwrite the slider defaults with anything passed in from data attributes:
     this.opts = Object.assign({}, this.slider.dataset, sliderDefaults);
 
-
-    this.intervalTime = this.opts.intervalTime; // Amount of time in ms each slide should be visible
+    // Set up remaining necessary state:
     this.currentSlide = 1; // The slides are 1-indexed, and current slide always starts at 1
-    this.numSlides = this.slides.length; // NOTE only initial slide image should load until document fully ready
+    this.numSlides = this.slides.length;
     this.isPlaying = false; // use to check if autoplay timer should be reset when next/prev slide is clicked
     this.interval; // initially undefined, reference used to the autoplay interval
   }
@@ -60,14 +60,10 @@ class Slider {
     }
   }
 
-  /**
-   * Transitions are inherently tied to the slider UI, and depend upon
-   * the number of slides to accurately calculate the % change in position.
-   * The setup function applies the correct % width for the overall
-   * constainer, then immedaitely applies a translateX value to
-   * position the slides.
-   */
+
   setupTransitions() {
+    // The sliding transition is inherently tied to the slider UI,
+    // ∵ it depends upon knowing number of slides; ∴ rendered inline
     Object.assign(this.slidesContainer.style, {
       width: `${this.numSlides * 100}%`,
       transitionDelay: this.opts.transitionDelay,
@@ -84,10 +80,7 @@ class Slider {
     this.slidesContainer.style.transform = translation;
   }
 
-  /**
-   * [showCurrent description]
-   * @return {[type]} [description]
-   */
+
   showCurrent() {
     // Switch aria-hidden on and off for accessibility reasons - the
     // non-visible slides should be hidden from accessibility tools.
@@ -117,7 +110,7 @@ class Slider {
   handlePlaySlides(e) {
     this.sliderControlPlay.disabled = true;
     this.isPlaying = true;
-    this.interval = setInterval(() => this.handleNextSlide(), this.intervalTime);
+    this.interval = setInterval(() => this.handleNextSlide(), this.opts.intervalTime);
     this.sliderControlPause.disabled = false;
   }
 
