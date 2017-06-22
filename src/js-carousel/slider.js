@@ -42,7 +42,7 @@ class Slider {
   }
 
   loadRemainingSlides() {
-    this.slidesContainer.querySelectorAll('img[data-src]').forEach(img => {
+    [...this.slidesContainer.querySelectorAll('img[data-src]')].forEach(img => {
       img.setAttribute('src', img.dataset.src);
       img.onload = () => img.removeAttribute('data-src');
     });

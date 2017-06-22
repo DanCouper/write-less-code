@@ -33,9 +33,10 @@
     <button type="button" value="pause slides" class="slider-autoplay-control slider-control-pause" aria-label="pause slides"  aria-controls="slides" disabled>||</button>
   </figure>
 
-  <script src="./slider.js"></script>
-  <script>
-    const slider = new Slider('.slider');
+  <script type="text/javascript" src="./slider.js"></script>
+  <script type="text/javascript">
+    // use `var` to avoid IE < Edge issues:
+    var slider = new Slider('.slider');
     slider.init();
   </script>
 </body>
