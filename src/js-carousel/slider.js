@@ -6,12 +6,6 @@
 
 class Slider {
   constructor(element) {
-    const sliderDefaults = {
-      intervalTime: 4000,
-      transitionDelay: '0s',
-      transitionDuration: '.75s',
-      transitionTimingFunction: 'cubic-bezier(0.550, 0.055, 0.675, 0.190)'
-    };
 
     // DOM selection:
     this.slider = document.querySelector(element);
@@ -32,7 +26,12 @@ class Slider {
     if (!this.hasControls && !this.canAutoplay) throw new Error('Slider controls cannot be located in the DOM');
 
     // Overwrite the slider defaults with anything passed in from data attributes:
-    this.opts = Object.assign({}, this.slider.dataset, sliderDefaults);
+    this.opts = Object.assign({
+      intervalTime: 4000,
+      transitionDelay: '0s',
+      transitionDuration: '.75s',
+      transitionTimingFunction: 'cubic-bezier(0.550, 0.055, 0.675, 0.190)'
+    }, this.slider.dataset);
 
     // Set up remaining necessary state:
     this.currentSlide = 1; // The slides are 1-indexed, and current slide always starts at 1
