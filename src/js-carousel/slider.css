@@ -25,3 +25,7 @@ body {
 .slide {
   width: 100%;
 }
+
+.slider-indicator[aria-selected='true'] {
+  color: red;
+}

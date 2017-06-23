@@ -17,13 +17,16 @@ class Slider {
     this.sliderControlNext = this.slider.querySelector('.slider-control-next');
     this.sliderControlPlay = this.slider.querySelector('.slider-control-play');
     this.sliderControlPause = this.slider.querySelector('.slider-control-pause');
+    this.sliderIndicators = this.slider.querySelectorAll('.slider-indicator');
+    this.sliderIndicatorsContainer = this.sliderIndicators[0].parentNode;
 
     // For the controls to work, both prev and next *must* be present.
     // for the autoplay to work, pause and play *must* be present.
     this.hasControls = !!this.sliderControlPrev && !!this.sliderControlNext;
     this.canAutoplay = !!this.sliderControlPlay && !!this.sliderControlPause;
+    this.hasIndicators = this.sliderIndicators.length > 0;
     // Immediately blow up if there are no controls at all:
-    if (!this.hasControls && !this.canAutoplay) throw new Error('Slider controls cannot be located in the DOM');
+    if (!this.hasControls && !this.canAutoplay && !this.hasIndicators) throw new Error('Slider controls cannot be located in the DOM');
 
     // Overwrite the slider defaults with anything passed in from data attributes:
     this.opts = Object.assign({
@@ -56,6 +59,9 @@ class Slider {
       if (this.canAutoplay) {
         [this.sliderControlPlay, this.sliderControlPause].forEach(ctrl => ctrl.setAttribute('aria-hidden', 'true'));
       }
+      if (this.hasIndicators)  {
+        this.sliderIndicatorsContainer.setAttribute('aria-hidden', 'true');
+      }
     }
   }
 
@@ -79,6 +85,12 @@ class Slider {
     this.slidesContainer.style.transform = translation;
   }
 
+  setIndicator() {
+    [...this.sliderIndicators].forEach((indicator, i) => {
+      indicator.setAttribute('aria-selected', (i + 1 === this.currentSlide) ? 'true' : 'false');
+    });
+  }
+
 
   showCurrent() {
     // Switch aria-hidden on and off for accessibility reasons - the
@@ -88,8 +100,16 @@ class Slider {
       // slides, need to compare against i + 1.
       slide.setAttribute('aria-hidden', (i + 1 === this.currentSlide) ? 'false' : 'true');
     });
-
+    this.setIndicator();
     this.applyTranslation();
+  }
+
+  handleIndicatorSelect(e) {
+    window.clearInterval(this.interval);
+    const selectedSlideIndex = [...this.sliderIndicatorsContainer.children].indexOf(e.target);
+    this.currentSlide = selectedSlideIndex + 1;
+    this.showCurrent();
+    if (this.canAutoplay && this.isPlaying) this.handlePlaySlides();
   }
 
   handleNextSlide(e) {
@@ -127,6 +147,7 @@ class Slider {
         case e.target === this.sliderControlNext: this.handleNextSlide(e); break;
         case e.target === this.sliderControlPlay: this.handlePlaySlides(e); break;
         case e.target === this.sliderControlPause: this.handlePauseSlides(e); break;
+        case this.sliderIndicatorsContainer.contains(e.target): this.handleIndicatorSelect(e); break;
       }
     });
 

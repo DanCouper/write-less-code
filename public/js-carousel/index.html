@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="./slider.css">
+  <title>Javascript Carousel</title>
 </head>
 <body>
   <figure class="slider">
+    <!-- NOTE id prop has to be created as unique; + aria-controls will then reference that unique collection -->
     <ul id="slides" class="slides" aria-live="polite">
       <li id="slide1" class="slide" aria-hidden="false">
         <img src="./images/img1.jpg" alt="">
@@ -27,10 +29,18 @@
     </ul>
 
 
-    <button type="button" value="prev" class="slider-control slider-control-prev" aria-label="previous slide" aria-controls="slides"><<</button>
-    <button type="button" value="next" class="slider-control slider-control-next" aria-label="next slide" aria-controls="slides">>></button>
-    <button type="button" value="play slides" class="slider-autoplay-control slider-control-play" aria-label="play slides" aria-controls="slides">▶︎</button>
-    <button type="button" value="pause slides" class="slider-autoplay-control slider-control-pause" aria-label="pause slides"  aria-controls="slides" disabled>||</button>
+    <button type="button" value="prev" class="slider-control-prev" aria-label="previous slide" aria-controls="slides"><<</button>
+    <button type="button" value="next" class="slider-control-next" aria-label="next slide" aria-controls="slides">>></button>
+    <button type="button" value="play slides" class="slider-control-play" aria-label="play slides" aria-controls="slides">▶︎</button>
+    <button type="button" value="pause slides" class="slider-control-pause" aria-label="pause slides"  aria-controls="slides" disabled>||</button>
+
+    <fieldset class="slider-indicators" aria-label="slider indicators">
+      <button type="button" class="slider-indicator" aria-selected="true" aria-controls="slides">◼︎</button>
+      <button type="button" class="slider-indicator" aria-selected="false" aria-controls="slides">◼︎</button>
+      <button type="button" class="slider-indicator" aria-selected="false" aria-controls="slides">◼︎</button>
+      <button type="button" class="slider-indicator" aria-selected="false" aria-controls="slides">◼︎</button>
+      <button type="button" class="slider-indicator" aria-selected="false" aria-controls="slides">◼︎</button>
+    </fieldset>
   </figure>
 
   <script type="text/javascript" src="./slider.js"></script>
