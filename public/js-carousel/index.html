@@ -4,49 +4,88 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://use.fontawesome.com/f0096dc871.js" async></script>
   <link rel="stylesheet" href="./slider.css">
   <title>Javascript Carousel</title>
 </head>
 <body>
-  <figure class="js-slider slider" data-autoplay="false">
+  <figure class="slider slider-basic" data-autoplay="false">
     <!-- NOTE id prop has to be created as unique; + aria-controls will then reference that unique collection -->
-    <ul id="slides-1" class="slides" aria-live="polite">
-      <li id="slides-1-slide1" class="slide" aria-hidden="false">
+    <ul id="slider-basic" class="js-slides slides" aria-live="polite">
+      <li id="slider-basic-slide1" class="js-slide slide" aria-hidden="false">
         <img src="./images/img1.jpg" alt="">
       </li>
-      <li id="slides-1-slide2" class="slide" aria-hidden="true">
+      <li id="slider-basic-slide2" class="js-slide slide" aria-hidden="true">
         <img data-src="./images/img2.jpg" alt="">
       </li>
-      <li id="slides-1-slide3" class="slide" aria-hidden="true">
+      <li id="slider-basic-slide3" class="js-slide slide" aria-hidden="true">
         <img data-src="./images/img3.jpg" alt="">
       </li>
-      <li id="slides-1-slide4" class="slide" aria-hidden="true">
+      <li id="slider-basic-slide4" class="js-slide slide" aria-hidden="true">
         <img data-src="./images/img4.jpg" alt="">
       </li>
-      <li id="slides-1-slide5" class="slide" aria-hidden="true">
+      <li id="slider-basic-slide5" class="js-slide slide" aria-hidden="true">
         <img data-src="./images/img5.jpg" alt="">
       </li>
     </ul>
 
 
-    <button type="button" value="prev" class="slider-control-prev" aria-label="previous slide" aria-controls="slides-1"><<</button>
-    <button type="button" value="next" class="slider-control-next" aria-label="next slide" aria-controls="slides-1">>></button>
-    <button type="button" value="play slides" class="slider-control-play" aria-label="play slides" aria-controls="slides-1">▶︎</button>
-    <button type="button" value="pause slides" class="slider-control-pause" aria-label="pause slides"  aria-controls="slides-1" disabled>||</button>
+    <button type="button" value="prev" class="js-slider-control-prev slider-control-prev" aria-label="previous slide" aria-controls="slider-basic"><<</button>
+    <button type="button" value="next" class="js-slider-control-next slider-control-next" aria-label="next slide" aria-controls="slider-basic">>></button>
+    <button type="button" value="play slides" class="js-slider-control-play slider-control-play" aria-label="play slides" aria-controls="slider-basic">▶︎</button>
+    <button type="button" value="pause slides" class="js-slider-control-pause slider-control-pause" aria-label="pause slides"  aria-controls="slider-basic" disabled>◼︎</button>
 
-    <fieldset class="slider-indicators" aria-label="slider indicators" aria-controls="slides-1">
-      <button type="button" class="slider-indicator" aria-selected="true">◼︎</button>
-      <button type="button" class="slider-indicator" aria-selected="false">◼︎</button>
-      <button type="button" class="slider-indicator" aria-selected="false">◼︎</button>
-      <button type="button" class="slider-indicator" aria-selected="false">◼︎</button>
-      <button type="button" class="slider-indicator" aria-selected="false">◼︎</button>
+    <fieldset class="slider-indicators" aria-label="slider indicators" aria-controls="slider-basic">
+      <button type="button" class="js-slider-indicator slider-indicator" aria-selected="true">◼︎</button>
+      <button type="button" class="js-slider-indicator slider-indicator" aria-selected="false">◼︎</button>
+      <button type="button" class="js-slider-indicator slider-indicator" aria-selected="false">◼︎</button>
+      <button type="button" class="js-slider-indicator slider-indicator" aria-selected="false">◼︎</button>
+      <button type="button" class="js-slider-indicator slider-indicator" aria-selected="false">◼︎</button>
+    </fieldset>
+  </figure>
+
+  <figure class="slider slider-01" data-autoplay="false">
+    <!-- NOTE id prop has to be created as unique; + aria-controls will then reference that unique collection -->
+    <ul id="slider-01" class="slider-01-slides js-slides slides" aria-live="polite">
+      <li id="slider-01-slide1" class="js-slide slide" aria-hidden="false">
+        <img src="./images/img1.jpg" alt="">
+      </li>
+      <li id="slider-01-slide2" class="js-slide slide" aria-hidden="true">
+        <img data-src="./images/img2.jpg" alt="">
+      </li>
+      <li id="slider-01-slide3" class="js-slide slide" aria-hidden="true">
+        <img data-src="./images/img3.jpg" alt="">
+      </li>
+      <li id="slider-01-slide4" class="js-slide slide" aria-hidden="true">
+        <img data-src="./images/img4.jpg" alt="">
+      </li>
+      <li id="slider-01-slide5" class="js-slide slide" aria-hidden="true">
+        <img data-src="./images/img5.jpg" alt="">
+      </li>
+    </ul>
+
+
+    <button type="button" value="prev" class="slider-01-control-prev js-slider-control-prev slider-control-prev" aria-label="previous slide" aria-controls="slider-01"><span class="fa fa-arrow-left"></span></button>
+    <button type="button" value="next" class="slider-01-control-next js-slider-control-next slider-control-next" aria-label="next slide" aria-controls="slider-01"><span class="fa fa-arrow-right"></span></button>
+    <fieldset class="slider-01-play-controls" aria-controls="slider-01">
+      <button type="button" value="play slides" class="slider-01-control-play js-slider-control-play slider-control-play" aria-label="play slides"><span class="fa fa-play"></span></button>
+      <button type="button" value="pause slides" class="slider-01-control-pause js-slider-control-pause slider-control-pause" aria-label="pause slides" disabled><span class="fa fa-pause"></span></button>
+    </fieldset>
+
+    <fieldset class="slider-01-slider-indicators slider-indicators" aria-label="slider indicators" aria-controls="slider-01">
+      <button type="button" class="slider-01-slider-indicator js-slider-indicator slider-indicator" aria-selected="true"><span class="fa fa-circle"></span><span class="fa fa-circle-o"></span></button>
+      <button type="button" class="slider-01-slider-indicator js-slider-indicator slider-indicator" aria-selected="false"><span class="fa fa-circle"></span><span class="fa fa-circle-o"></span></button>
+      <button type="button" class="slider-01-slider-indicator js-slider-indicator slider-indicator" aria-selected="false"><span class="fa fa-circle"></span><span class="fa fa-circle-o"></span></button>
+      <button type="button" class="slider-01-slider-indicator js-slider-indicator slider-indicator" aria-selected="false"><span class="fa fa-circle"></span><span class="fa fa-circle-o"></span></button>
+      <button type="button" class="slider-01-slider-indicator js-slider-indicator slider-indicator" aria-selected="false"><span class="fa fa-circle"></span><span class="fa fa-circle-o"></span></button>
     </fieldset>
   </figure>
 
   <script type="text/javascript" src="./slider.js"></script>
   <script type="text/javascript">
     // use `var` to avoid IE < Edge issues:
-    var slider = new Slider('.js-slider');
+    var sliderBasic = new Slider('.slider-basic');
+    var slider01 = new Slider('.slider-01');
   </script>
 </body>
 </html>
