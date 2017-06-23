@@ -13,8 +13,8 @@ class Slider {
 
     // DOM selection:
     this.slider = document.querySelector(element);
-    this.slidesContainer = this.slider.querySelector('.slides');
-    this.slides = this.slider.querySelectorAll('.slide');
+    this.slidesContainer = this.slider.querySelector('.js-slides');
+    this.slides = this.slider.querySelectorAll('.js-slide');
 
     // Overwrite the slider defaults with anything passed in as data attributes:
     this.opts = Object.assign({
@@ -43,19 +43,19 @@ class Slider {
     // NOTE previous/next/play/pause controls are all defined seperately
     // to allow them to be placed anywhere within the slider markup
     // and styled individually
-    this.sliderControlPrev = this.slider.querySelector('.slider-control-prev');
-    this.sliderControlNext = this.slider.querySelector('.slider-control-next');
+    this.sliderControlPrev = this.slider.querySelector('.js-slider-control-prev');
+    this.sliderControlNext = this.slider.querySelector('.js-slider-control-next');
     // For the controls to work, both prev and next *must* be present.
     this.hasControls = !!this.sliderControlPrev && !!this.sliderControlNext;
 
-    this.sliderControlPlay = this.slider.querySelector('.slider-control-play');
-    this.sliderControlPause = this.slider.querySelector('.slider-control-pause');
+    this.sliderControlPlay = this.slider.querySelector('.js-slider-control-play');
+    this.sliderControlPause = this.slider.querySelector('.js-slider-control-pause');
     // for the autoplay to work, pause and play *must* be present.
     this.canPlay = !!this.sliderControlPlay && !!this.sliderControlPause;
 
     // NOTE the slider indicators should be defined as a contained set of
     // elements (eg `<button>`s in a `<fieldset>`)
-    this.sliderIndicators = this.slider.querySelectorAll('.slider-indicator');
+    this.sliderIndicators = this.slider.querySelectorAll('.js-slider-indicator');
     this.sliderIndicatorsContainer = this.sliderIndicators[0].parentNode;
     this.hasIndicators = this.sliderIndicators.length > 0;
 
@@ -159,12 +159,11 @@ class Slider {
   bindEvents() {
     this.slider.addEventListener('click', e => {
       switch (true) {
-        case e.target === this.sliderControlPrev: this.handlePrevSlide(e); break;
-        case e.target === this.sliderControlNext: this.handleNextSlide(e); break;
-        case e.target === this.sliderControlPlay: this.handlePlaySlides(e); break;
-        case e.target === this.sliderControlPause: this.handlePauseSlides(e); break;
+        case e.target == this.sliderControlPrev: this.handlePrevSlide(e); break;
+        case e.target == this.sliderControlNext: this.handleNextSlide(e); break;
+        case e.target == this.sliderControlPlay: this.handlePlaySlides(e); break;
+        case e.target == this.sliderControlPause: this.handlePauseSlides(e); break;
         case this.sliderIndicatorsContainer.contains(e.target): this.handleIndicatorSelect(e); break;
-        default: noop();
       }
     });
 
@@ -172,7 +171,12 @@ class Slider {
     // remaining slide images and start playing slides if autoplay option is true:
     window.addEventListener('load', () => {
       this.loadRemainingSlides();
-      if (this.opts.autoplay === 'true') this.handlePlaySlides();
+      if (this.canPlay) {
+        switch (this.opts.autoplay) {
+          case 'true': this.handlePlaySlides(); break;
+          case 'false': this.handlePauseSlides(); break;
+        }
+      }
     });
   }
 }
