@@ -1,7 +1,11 @@
+function noop() { return void 0; }
 /**
  * Creates and initialises a slider. If the slider is not
  * fully initialised, the page shouold just render a single slide,
  * with no controls.
+ *
+ * REVIEW all slide-to code should be in one handler, call that with params
+ * REVIEW too much state, reduce if poss
  */
 
 class Slider {
@@ -10,26 +14,11 @@ class Slider {
     // DOM selection:
     this.slider = document.querySelector(element);
     this.slidesContainer = this.slider.querySelector('.slides');
-    this.slides = this.slider.getElementsByClassName('slide');
+    this.slides = this.slider.querySelectorAll('.slide');
 
-    // DOM controls, undefined until controls are loaded (these may not exist):
-    this.sliderControlPrev = this.slider.querySelector('.slider-control-prev');
-    this.sliderControlNext = this.slider.querySelector('.slider-control-next');
-    this.sliderControlPlay = this.slider.querySelector('.slider-control-play');
-    this.sliderControlPause = this.slider.querySelector('.slider-control-pause');
-    this.sliderIndicators = this.slider.querySelectorAll('.slider-indicator');
-    this.sliderIndicatorsContainer = this.sliderIndicators[0].parentNode;
-
-    // For the controls to work, both prev and next *must* be present.
-    // for the autoplay to work, pause and play *must* be present.
-    this.hasControls = !!this.sliderControlPrev && !!this.sliderControlNext;
-    this.canAutoplay = !!this.sliderControlPlay && !!this.sliderControlPause;
-    this.hasIndicators = this.sliderIndicators.length > 0;
-    // Immediately blow up if there are no controls at all:
-    if (!this.hasControls && !this.canAutoplay && !this.hasIndicators) throw new Error('Slider controls cannot be located in the DOM');
-
-    // Overwrite the slider defaults with anything passed in from data attributes:
+    // Overwrite the slider defaults with anything passed in as data attributes:
     this.opts = Object.assign({
+      autoplay: 'true',
       intervalTime: 4000,
       transitionDelay: '0s',
       transitionDuration: '.75s',
@@ -40,23 +29,46 @@ class Slider {
     this.currentSlide = 1; // The slides are 1-indexed, and current slide always starts at 1
     this.numSlides = this.slides.length;
     this.isPlaying = false; // use to check if autoplay timer should be reset when next/prev slide is clicked
-    this.interval; // initially undefined, reference used to the autoplay interval
+    this.interval; // initially undefined reference used for the interval used playing the slideshow
+
+    // Initialise:
+    this.setupControls();
+    this.setupTransitions();
+    this.bindEvents();
   }
 
-  loadRemainingSlides() {
-    [...this.slidesContainer.querySelectorAll('img[data-src]')].forEach(img => {
-      img.setAttribute('src', img.dataset.src);
-      img.onload = () => img.removeAttribute('data-src');
-    });
-  }
+  setupControls() {
+    // DOM controls (these may not exist):
 
-  loadControls() {
-    // If there is only one slide (or none), no controls need be rendered:
+    // NOTE previous/next/play/pause controls are all defined seperately
+    // to allow them to be placed anywhere within the slider markup
+    // and styled individually
+    this.sliderControlPrev = this.slider.querySelector('.slider-control-prev');
+    this.sliderControlNext = this.slider.querySelector('.slider-control-next');
+    // For the controls to work, both prev and next *must* be present.
+    this.hasControls = !!this.sliderControlPrev && !!this.sliderControlNext;
+
+    this.sliderControlPlay = this.slider.querySelector('.slider-control-play');
+    this.sliderControlPause = this.slider.querySelector('.slider-control-pause');
+    // for the autoplay to work, pause and play *must* be present.
+    this.canPlay = !!this.sliderControlPlay && !!this.sliderControlPause;
+
+    // NOTE the slider indicators should be defined as a contained set of
+    // elements (eg `<button>`s in a `<fieldset>`)
+    this.sliderIndicators = this.slider.querySelectorAll('.slider-indicator');
+    this.sliderIndicatorsContainer = this.sliderIndicators[0].parentNode;
+    this.hasIndicators = this.sliderIndicators.length > 0;
+
+    // SLideshow should immediately blow up if there are no controls located:
+    if (!this.hasControls && !this.canPlay && !this.hasIndicators) throw new Error('Slider controls cannot be located in the DOM');
+
+    // If there is only one slide (or none), no controls should be rendered
+    // even if they are present in the DOM:
     if (this.numSlides < 2) {
       if (this.hasControls) {
         [this.sliderControlPrev, this.sliderControlNext].forEach(ctrl => ctrl.setAttribute('aria-hidden', 'true'));
       }
-      if (this.canAutoplay) {
+      if (this.canPlay) {
         [this.sliderControlPlay, this.sliderControlPause].forEach(ctrl => ctrl.setAttribute('aria-hidden', 'true'));
       }
       if (this.hasIndicators)  {
@@ -65,6 +77,12 @@ class Slider {
     }
   }
 
+  loadRemainingSlides() {
+    [...this.slidesContainer.querySelectorAll('img[data-src]')].forEach(img => {
+      img.setAttribute('src', img.dataset.src);
+      img.onload = () => img.removeAttribute('data-src');
+    });
+  }
 
   setupTransitions() {
     // The sliding transition is inherently tied to the slider UI,
@@ -104,26 +122,24 @@ class Slider {
     this.applyTranslation();
   }
 
-  handleIndicatorSelect(e) {
+  handleSlideTo(n) {
     window.clearInterval(this.interval);
-    const selectedSlideIndex = [...this.sliderIndicatorsContainer.children].indexOf(e.target);
-    this.currentSlide = selectedSlideIndex + 1;
+    this.currentSlide = n;
     this.showCurrent();
-    if (this.canAutoplay && this.isPlaying) this.handlePlaySlides();
+    if (this.canPlay && this.isPlaying) this.handlePlaySlides();
+  }
+
+  handleIndicatorSelect(e) {
+    const selectedSlideIndex = [...this.sliderIndicatorsContainer.children].indexOf(e.target);
+    this.handleSlideTo(selectedSlideIndex + 1);
   }
 
   handleNextSlide(e) {
-    window.clearInterval(this.interval);
-    this.currentSlide = (this.currentSlide + 1 > this.numSlides) ? 1 : this.currentSlide + 1;
-    this.showCurrent();
-    if (this.canAutoplay && this.isPlaying) this.handlePlaySlides();
+    this.handleSlideTo((this.currentSlide + 1 > this.numSlides) ? 1 : this.currentSlide + 1);
   }
 
   handlePrevSlide(e) {
-    window.clearInterval(this.interval);
-    this.currentSlide = (this.currentSlide - 1 === 0) ? this.numSlides : this.currentSlide - 1;
-    this.showCurrent();
-    if (this.canAutoplay && this.isPlaying) this.handlePlaySlides();
+    this.handleSlideTo((this.currentSlide - 1 === 0) ? this.numSlides : this.currentSlide - 1);
   }
 
   handlePlaySlides(e) {
@@ -148,19 +164,15 @@ class Slider {
         case e.target === this.sliderControlPlay: this.handlePlaySlides(e); break;
         case e.target === this.sliderControlPause: this.handlePauseSlides(e); break;
         case this.sliderIndicatorsContainer.contains(e.target): this.handleIndicatorSelect(e); break;
+        default: noop();
       }
     });
 
-    // Set up the autoplay after everything, including images, has loaded:
+    // Once everything on the page, including images, has loaded, load the
+    // remaining slide images and start playing slides if autoplay option is true:
     window.addEventListener('load', () => {
       this.loadRemainingSlides();
-      if (this.canAutoplay) this.handlePlaySlides();
+      if (this.opts.autoplay === 'true') this.handlePlaySlides();
     });
-  }
-
-  init() {
-    this.loadControls();
-    this.setupTransitions();
-    this.bindEvents();
   }
 }
